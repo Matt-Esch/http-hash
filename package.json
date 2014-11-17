@@ -1,0 +1,51 @@
+{
+  "name": "http-hash",
+  "version": "1.0.0",
+  "description": "HTTP router based on a strict path tree structure",
+  "keywords": ["router", "http", "path", "hash"],
+  "author": "Matt Esch <matt@mattesch.info>",
+  "repository": "git://github.com/Matt-Esch/http-hash.git",
+  "main": "index",
+  "homepage": "https://github.com/Matt-Esch/http-hash",
+  "bugs": {
+    "url": "https://github.com/Matt-Esch/http-hash/issues",
+    "email": "matt@mattesch.info"
+  },
+  "contributors": [{
+    "name": "Matt Esch"
+  }],
+  "dependencies": {
+  },
+  "devDependencies": {
+    "tape": "^2.12.3",
+    "jshint": "^2.5.0",
+    "istanbul": "^0.2.7",
+    "tap-spec": "^0.1.8",
+    "pre-commit": "0.0.5",
+    "coveralls": "^2.10.0",
+    "run-browser": "^1.3.0"
+  },
+  "licenses": [{
+    "type": "MIT",
+    "url": "http://github.com/Matt-Esch/http-hash/raw/master/LICENSE"
+  }],
+  "scripts": {
+    "test": "npm run jshint -s && NODE_ENV=test node test/index.js | tap-spec",
+    "unit-test": "NODE_ENV=test node test/index.js | tap-spec",
+    "jshint-pre-commit": "jshint --verbose $(git diff --cached --name-only | grep '\\.js$')",
+    "jshint": "jshint --verbose .",
+    "cover": "istanbul cover --report none --print detail test/index.js",
+    "view-cover": "istanbul report html && open ./coverage/index.html",
+    "travis": "npm run cover -s && istanbul report lcov && ((cat coverage/lcov.info | coveralls) || exit 0)",
+    "phantom": "run-browser test/index.js -b",
+    "browser": "run-browser test/index.js"
+  },
+  "engine": {
+    "node": ">= 0.8.x"
+  },
+  "pre-commit": [
+    "jshint-pre-commit",
+    "unit-test"
+  ],
+  "ngen-version": "4.0.3"
+}
