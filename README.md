@@ -282,7 +282,7 @@ of the route matched.
 
   [build-png]: https://secure.travis-ci.org/Matt-Esch/http-hash.png
   [build]: https://travis-ci.org/Matt-Esch/http-hash
-  [cover-png]: https://coveralls.io/repos/Matt-Esch/http-hash/badge.png
+  [cover-png]: https://coveralls.io/repos/Matt-Esch/http-hash/badge.png?branch=master
   [cover]: https://coveralls.io/r/Matt-Esch/http-hash
   [dep-png]: https://david-dm.org/Matt-Esch/http-hash.png
   [dep]: https://david-dm.org/Matt-Esch/http-hash
