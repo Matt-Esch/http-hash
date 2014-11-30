@@ -17,7 +17,6 @@ function get(pathname) {
     var hash = this._hash;
     var splat = null;
     var params = {};
-    var staticPath;
     var variablePaths;
 
     for (var i = 0; i < pathSegments.length; i++) {
@@ -25,8 +24,8 @@ function get(pathname) {
 
         if (!segment && !hash.isSplat) {
             continue;
-        } else if ((staticPath = hash.staticPaths[segment])) {
-            hash = staticPath;
+        } else if (hash.staticPaths.hasOwnProperty(segment)) {
+            hash = hash.staticPaths[segment];
         } else if ((variablePaths = hash.variablePaths)) {
             if (variablePaths.isSplat) {
                 splat = pathSegments.slice(i).join('/');
@@ -84,7 +83,10 @@ function set(pathname, handler) {
             }
         } else {
             hash = (
-                hash.staticPaths[segment] ||
+                (
+                    hash.staticPaths.hasOwnProperty(segment) &&
+                    hash.staticPaths[segment]
+                ) ||
                 (hash.staticPaths[segment] = new RouteNode(hash, segment))
             );
         }

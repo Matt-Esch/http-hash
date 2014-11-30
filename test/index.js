@@ -420,3 +420,23 @@ test('splat routes do not work on variable nodes', function (assert) {
     assert.strictEqual(exception.conflictPath, '/:var/');
     assert.end();
 });
+
+test('does not conflict with prototype', function (assert) {
+    // Arrange
+    var hash = HttpHash();
+
+    function validHandler() {}
+
+    hash.set('/toString/valueOf', validHandler);
+
+    //Act
+    var toStringResult = hash.get('toString');
+    var valueOfResult = hash.get('valueOf');
+    var pathResult = hash.get('/toString/valueOf');
+
+    // Assert
+    assert.strictEqual(toStringResult.handler, null);
+    assert.strictEqual(valueOfResult.handler, null);
+    assert.strictEqual(pathResult.handler, validHandler);
+    assert.end();
+});
