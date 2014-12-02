@@ -278,7 +278,7 @@ of the route matched.
 
  - Matt Esch
 
-## MIT Licenced
+## MIT Licensed
 
   [build-png]: https://secure.travis-ci.org/Matt-Esch/http-hash.png
   [build]: https://travis-ci.org/Matt-Esch/http-hash
