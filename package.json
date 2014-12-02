@@ -1,6 +1,6 @@
 {
   "name": "http-hash",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "HTTP router based on a strict path tree structure",
   "keywords": [
     "router",
