@@ -429,7 +429,7 @@ test('does not conflict with prototype', function (assert) {
 
     hash.set('/toString/valueOf', validHandler);
 
-    //Act
+    // Act
     var toStringResult = hash.get('toString');
     var valueOfResult = hash.get('valueOf');
     var pathResult = hash.get('/toString/valueOf');
@@ -438,5 +438,27 @@ test('does not conflict with prototype', function (assert) {
     assert.strictEqual(toStringResult.handler, null);
     assert.strictEqual(valueOfResult.handler, null);
     assert.strictEqual(pathResult.handler, validHandler);
+    assert.end();
+});
+
+test('does not conflict with __proto__', function (assert) {
+    // Arrage
+    var hash = HttpHash();
+
+    function validHandler() {}
+    function validSubHandler() {}
+
+    hash.set('/__proto__', validHandler);
+    hash.set('/__proto__/sub', validSubHandler);
+
+    // Act
+    var validResult = hash.get('/__proto__');
+    var validSubResult = hash.get('/__proto__/sub');
+    var invalidResult = hash.get('/__proto__/__proto__');
+
+    // Assert
+    assert.strictEqual(validResult.handler, validHandler);
+    assert.strictEqual(validSubResult.handler, validSubHandler);
+    assert.strictEqual(invalidResult.handler, null);
     assert.end();
 });

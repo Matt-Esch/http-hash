@@ -24,6 +24,11 @@ function get(pathname) {
 
         if (!segment && !hash.isSplat) {
             continue;
+        } else if (
+            segment === '__proto__' &&
+            hash.hasOwnProperty('proto')
+        ) {
+            hash = hash.proto;
         } else if (hash.staticPaths.hasOwnProperty(segment)) {
             hash = hash.staticPaths[segment];
         } else if ((variablePaths = hash.variablePaths)) {
@@ -81,6 +86,14 @@ function set(pathname, handler) {
             if (hash.segment !== segment || hash.isSplat) {
                 throw RouteConflictError(pathname, hash);
             }
+        } else if (segment === '__proto__') {
+            hash = (
+                (
+                    hash.hasOwnProperty('proto') &&
+                    hash.proto
+                ) ||
+                (hash.proto = new RouteNode(hash, segment))
+            );
         } else {
             hash = (
                 (
