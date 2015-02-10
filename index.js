@@ -5,7 +5,7 @@ function HttpHash() {
         return new HttpHash();
     }
 
-    this._hash = new RouteNode();
+    this._hash = new RouteNode(null, null, false, "/");
 }
 
 HttpHash.prototype.get = get;
@@ -63,6 +63,8 @@ function set(pathname, handler) {
     for (var i = 0; i < pathSegments.length; i++) {
         var segment = pathSegments[i];
 
+        var srcThusFar = pathSegments.slice(0, i + 1).join('/');
+
         if (!segment) {
             continue;
         }
@@ -70,7 +72,7 @@ function set(pathname, handler) {
         if (hasSplat && i === lastIndex) {
             hash = (
                 hash.variablePaths ||
-                (hash.variablePaths = new RouteNode(hash, segment, true))
+                (hash.variablePaths = new RouteNode(hash, segment, true, srcThusFar))
             );
 
             if (!hash.isSplat) {
@@ -80,7 +82,7 @@ function set(pathname, handler) {
             segment = segment.slice(1);
             hash = (
                 hash.variablePaths ||
-                (hash.variablePaths = new RouteNode(hash, segment))
+                (hash.variablePaths = new RouteNode(hash, segment, false, srcThusFar))
             );
 
             if (hash.segment !== segment || hash.isSplat) {
@@ -92,7 +94,7 @@ function set(pathname, handler) {
                     hash.hasOwnProperty('proto') &&
                     hash.proto
                 ) ||
-                (hash.proto = new RouteNode(hash, segment))
+                (hash.proto = new RouteNode(hash, segment, false, srcThusFar))
             );
         } else {
             hash = (
@@ -100,7 +102,7 @@ function set(pathname, handler) {
                     hash.staticPaths.hasOwnProperty(segment) &&
                     hash.staticPaths[segment]
                 ) ||
-                (hash.staticPaths[segment] = new RouteNode(hash, segment))
+                (hash.staticPaths[segment] = new RouteNode(hash, segment, false, srcThusFar))
             );
         }
     }
@@ -112,19 +114,21 @@ function set(pathname, handler) {
     }
 }
 
-function RouteNode(parent, segment, isSplat) {
+function RouteNode(parent, segment, isSplat, src) {
     this.parent = parent || null;
     this.segment = segment || null;
     this.handler = null;
     this.staticPaths = {};
     this.variablePaths = null;
     this.isSplat = !!isSplat;
+    this.src = src || null;
 }
 
 function RouteResult(node, params, splat) {
     this.handler = node && node.handler || null;
     this.splat = splat;
     this.params = params;
+    this.src = node && node.src;
 }
 
 function SplatError(pathname) {
