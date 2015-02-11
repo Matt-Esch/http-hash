@@ -5,7 +5,7 @@ function HttpHash() {
         return new HttpHash();
     }
 
-    this._hash = new RouteNode(null, null, false, "/");
+    this._hash = new RouteNode(null, null, false, '/');
 }
 
 HttpHash.prototype.get = get;
