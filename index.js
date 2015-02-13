@@ -105,9 +105,8 @@ function set(pathname, handler) {
         }
     }
 
-    hash.src = pathname;
-
     if (!hash.handler) {
+        hash.src = pathname;
         hash.handler = handler;
     } else {
         throw RouteConflictError(pathname, hash);
