@@ -69,6 +69,7 @@ test('http hash retrieves root', function (assert) {
 
     // Assert
     assert.strictEqual(result.handler, routeHandler);
+    assert.strictEqual(result.src, '/');
     assert.strictEqual(result.splat, null);
     assert.deepEqual(result.params, expectedParams);
     assert.end();
@@ -88,6 +89,7 @@ test('http hash retrieves fixed route', function (assert) {
 
     // Assert
     assert.strictEqual(result.handler, routeHandler);
+    assert.strictEqual(result.src, '/test');
     assert.strictEqual(result.splat, null);
     assert.deepEqual(result.params, expectedParams);
     assert.end();
@@ -108,6 +110,7 @@ test('http hash retrieves variable route', function (assert) {
 
     // Assert
     assert.strictEqual(result.handler, routeHandler);
+    assert.strictEqual(result.src, '/:test');
     assert.strictEqual(result.splat, null);
     assert.deepEqual(result.params, expectedParams);
     assert.end();
@@ -289,7 +292,6 @@ test('nesting routes', function (assert) {
     // there should be 3 conflicts violation of variable name
     assert.strictEqual(conflicts.length, 3);
 
-    console.log(conflicts);
     assert.strictEqual(conflicts[0], '2,0');
     assert.strictEqual(conflicts[1], '2,1');
     assert.strictEqual(conflicts[2], '2,2');
@@ -315,6 +317,7 @@ test('deep route with splat test', function (assert) {
     var result = hash.get('/a/123456///b///testing/c/kersplat');
 
     // Assert
+    assert.strictEqual(result.src, "/a/:varA/b/:varB/c/*");
     assert.strictEqual(result.handler, routeHandler);
     assert.strictEqual(result.splat, expectedSplat);
     assert.deepEqual(result.params, expectedParams);
@@ -358,10 +361,12 @@ test('static routes work on splat nodes', function (assert) {
     var staticResult = hash.get('/static');
 
     // Assert
+    assert.strictEqual(splatResult.src, "*");
     assert.strictEqual(splatResult.handler, splatHandler);
     assert.strictEqual(splatResult.splat, 'testing');
     assert.deepEqual(splatResult.params, {});
 
+    assert.strictEqual(staticResult.src, "/static");
     assert.strictEqual(staticResult.handler, staticHandler);
     assert.strictEqual(staticResult.splat, null);
     assert.deepEqual(staticResult.params, {});
@@ -438,6 +443,7 @@ test('does not conflict with prototype', function (assert) {
     assert.strictEqual(toStringResult.handler, null);
     assert.strictEqual(valueOfResult.handler, null);
     assert.strictEqual(pathResult.handler, validHandler);
+    assert.strictEqual(pathResult.src, '/toString/valueOf');
     assert.end();
 });
 
@@ -458,7 +464,9 @@ test('does not conflict with __proto__', function (assert) {
 
     // Assert
     assert.strictEqual(validResult.handler, validHandler);
+    assert.strictEqual(validResult.src, '/__proto__');
     assert.strictEqual(validSubResult.handler, validSubHandler);
+    assert.strictEqual(validSubResult.src, '/__proto__/sub');
     assert.strictEqual(invalidResult.handler, null);
     assert.end();
 });

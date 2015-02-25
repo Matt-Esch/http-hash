@@ -106,6 +106,7 @@ function set(pathname, handler) {
     }
 
     if (!hash.handler) {
+        hash.src = pathname;
         hash.handler = handler;
     } else {
         throw RouteConflictError(pathname, hash);
@@ -119,12 +120,14 @@ function RouteNode(parent, segment, isSplat) {
     this.staticPaths = {};
     this.variablePaths = null;
     this.isSplat = !!isSplat;
+    this.src = null;
 }
 
 function RouteResult(node, params, splat) {
     this.handler = node && node.handler || null;
     this.splat = splat;
     this.params = params;
+    this.src = node && node.src || null;
 }
 
 function SplatError(pathname) {
