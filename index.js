@@ -139,7 +139,7 @@ function SplatError(pathname) {
 }
 
 function RouteConflictError(pathname, hash) {
-    var conflictPath = hash.isSplat ? '': '/';
+    var conflictPath = hash.isSplat ? '' : '/';
 
     while (hash && hash.parent) {
         var prefix = (
