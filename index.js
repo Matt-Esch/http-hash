@@ -111,7 +111,7 @@ function set(pathname, handler) {
         hash.src = pathname;
         hash.handler = handler;
     } else {
-        throw RouteConflictError(pathname, hash);
+        throwRouteConflictError(pathname, hash);
     }
 }
 
@@ -157,4 +157,9 @@ function RouteConflictError(pathname, hash) {
     err.conflictPath = conflictPath;
 
     return err;
+}
+
+// Break this out to prevent deoptimization of path.set
+function throwRouteConflictError(pathname, hash) {
+    throw RouteConflictError(pathname, hash);
 }
