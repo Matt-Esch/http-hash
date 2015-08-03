@@ -1,3 +1,5 @@
+'use strict';
+
 var test = require('tape');
 
 var HttpHash = require('../index.js');
@@ -317,7 +319,7 @@ test('deep route with splat test', function (assert) {
     var result = hash.get('/a/123456///b///testing/c/kersplat');
 
     // Assert
-    assert.strictEqual(result.src, "/a/:varA/b/:varB/c/*");
+    assert.strictEqual(result.src, '/a/:varA/b/:varB/c/*');
     assert.strictEqual(result.handler, routeHandler);
     assert.strictEqual(result.splat, expectedSplat);
     assert.deepEqual(result.params, expectedParams);
@@ -361,12 +363,12 @@ test('static routes work on splat nodes', function (assert) {
     var staticResult = hash.get('/static');
 
     // Assert
-    assert.strictEqual(splatResult.src, "*");
+    assert.strictEqual(splatResult.src, '*');
     assert.strictEqual(splatResult.handler, splatHandler);
     assert.strictEqual(splatResult.splat, 'testing');
     assert.deepEqual(splatResult.params, {});
 
-    assert.strictEqual(staticResult.src, "/static");
+    assert.strictEqual(staticResult.src, '/static');
     assert.strictEqual(staticResult.handler, staticHandler);
     assert.strictEqual(staticResult.splat, null);
     assert.deepEqual(staticResult.params, {});
@@ -468,5 +470,25 @@ test('does not conflict with __proto__', function (assert) {
     assert.strictEqual(validSubResult.handler, validSubHandler);
     assert.strictEqual(validSubResult.src, '/__proto__/sub');
     assert.strictEqual(invalidResult.handler, null);
+    assert.end();
+});
+
+test('root splat matches all', function (assert) {
+    // Arrage
+    var hash = HttpHash();
+
+    function validHandler() {}
+
+    hash.set('*', validHandler);
+
+    // Act
+    var validEmptyResult = hash.get('');
+    var validRootResult = hash.get('/');
+    var validNestedResult = hash.get('/a/b/c');
+
+    // Assert
+    assert.strictEqual(validEmptyResult.handler, validHandler);
+    assert.strictEqual(validRootResult.handler, validHandler);
+    assert.strictEqual(validNestedResult.handler, validHandler);
     assert.end();
 });

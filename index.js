@@ -48,6 +48,16 @@ function get(pathname) {
         }
     }
 
+    // Match the empty splat
+    if (hash &&
+        hash.handler === null &&
+        hash.variablePaths &&
+        hash.variablePaths.isSplat
+    ) {
+        splat = '';
+        hash = hash.variablePaths;
+    }
+
     return new RouteResult(hash, params, splat);
 }
 
@@ -107,7 +117,7 @@ function set(pathname, handler) {
         }
     }
 
-    if (!hash.handler) {
+    if (hash.handler === null) {
         hash.src = pathname;
         hash.handler = handler;
     } else {

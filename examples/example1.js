@@ -1,3 +1,5 @@
+'use strict';
+
 var HttpHash = require('../index.js');
 
 // Create a new http hash
