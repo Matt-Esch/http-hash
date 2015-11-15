@@ -79,7 +79,7 @@ console.log(route);
 ## Overview
 
 The most popular node routers are based on regular expression
-mathching. This means that the order in which the routes are
+matching. This means that the order in which the routes are
 defined affects the resolution of a route to handler. Sometimes
 this is desirable, but it would often be better to have a
 resolution scheme that is easier to reason about.
