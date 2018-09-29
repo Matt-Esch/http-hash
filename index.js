@@ -17,11 +17,13 @@ function get(pathname) {
     var pathSegments = pathname.split('/');
 
     var hash = this._hash;
+    var parentNode = hash;
     var splat = null;
     var params = {};
     var variablePaths;
+    var i = 0;
 
-    for (var i = 0; i < pathSegments.length; i++) {
+    for (; i < pathSegments.length; i++) {
         var segment = pathSegments[i];
 
         if (!segment && !hash.isSplat) {
@@ -32,19 +34,35 @@ function get(pathname) {
         ) {
             hash = hash.proto;
         } else if (hash.staticPaths.hasOwnProperty(segment)) {
+            parentNode = hash;
             hash = hash.staticPaths[segment];
         } else if ((variablePaths = hash.variablePaths)) {
             if (variablePaths.isSplat) {
                 splat = pathSegments.slice(i).join('/');
+                parentNode = hash;
                 hash = variablePaths;
                 break;
             } else {
                 params[variablePaths.segment] = segment;
+                parentNode = hash;
                 hash = variablePaths;
             }
         } else {
             hash = null;
             break;
+        }
+    }
+
+    // backtrace
+    while (hash === null && parentNode && i >= 0) {
+        var parentVp = parentNode.variablePaths;
+        i -= 1;
+        if (parentVp && parentVp.isSplat) {
+            splat = pathSegments.slice(i).join('/');
+            hash = parentVp;
+            break;
+        } else {
+            parentNode = parentNode.parent;
         }
     }
 
