@@ -32,12 +32,7 @@
     "tap-spec": "^0.1.8",
     "tape": "^2.12.3"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "http://github.com/Matt-Esch/http-hash/raw/master/LICENSE"
-    }
-  ],
+  "license": "MIT",
   "scripts": {
     "test": "npm run jshint -s && NODE_ENV=test node test/index.js | tap-spec",
     "unit-test": "NODE_ENV=test node test/index.js | tap-spec",
