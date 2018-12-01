@@ -58,7 +58,7 @@ var HttpHash = require('http-hash');
 // Create a new http hash
 var hash = HttpHash();
 
-// Create a route mapping to /test/<anything but "/">/<anything>
+// Create a route mapping to /foo/<anything but "/">/<anything>
 hash.set('/foo/:test/*', function (req, res) {
     res.end();
 });
