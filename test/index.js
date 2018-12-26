@@ -23,6 +23,32 @@ test('http hash inserts root', function (assert) {
     assert.end();
 });
 
+test('http hash test priority of /a/b/c and /a/b/*', function (assert) {
+    // Arrange
+    function routeHandlerABC() {}
+    function routeHandlerABStar() {}
+
+    var hash = HttpHash();
+
+    // Act
+    hash.set('/a/b/c', routeHandlerABC);
+    hash.set('/a/b/*', routeHandlerABStar);
+
+    // get
+    var res1 = hash.get('/a/b/c');
+    var res2 = hash.get('/a/b/c/d');
+    var res3 = hash.get('/a/b/e');
+    var res4 = hash.get('/a/b');
+    var res5 = hash.get('/a/c');
+    // Assert
+    assert.strictEqual(res1.handler, routeHandlerABC);
+    assert.strictEqual(res2.handler, routeHandlerABStar);
+    assert.strictEqual(res3.handler, routeHandlerABStar);
+    assert.strictEqual(res4.handler, routeHandlerABStar);
+    assert.strictEqual(res5.handler, null);
+    assert.end();
+});
+
 test('http hash inserts fixed route', function (assert) {
     // Arrange
     function routeHandler() {}
